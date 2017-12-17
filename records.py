@@ -52,9 +52,10 @@ class record:
     def get(self):
         return self._lan2
     
-    def remove(self,name):
-        if name in self._lan2:
-            self._lan2.remove(name)
+    def remove(self,*lname):
+        for name in lname:
+            if name in self._lan2:
+                self._lan2.remove(name)
 
 class Ask_question:
     def __init__(self,*ltheme,mode = 0):
@@ -246,27 +247,31 @@ def change(mean,new_mean,key,new_key = 0,*theme):
         rec = cur_base[lan][key]
         if mode:
             rec = record(key,*mean)
+
         # Изменение ключа key на new_key
         if new_key:
+            # Если будут удаляться существуюшие значения при одинаковых заменах значениЙ смотри сюда
+            if not mode:
+                del (cur_base[lan][key])
+            else:
+                cur_base[lan][key].remove(*mean)
+                if len(cur_base[lan][key].get()) < 1:
+                    del (cur_base[lan][key])
+
             rec.chname(new_key)
             if cur_base[lan].get(new_key):
                 cur_base[lan][new_key].append(rec)
             else:
                 cur_base[lan][new_key] = rec
-            # Если будут удаляться существуюшие значения при одинаковых заменах значениЙ смотри сюда
-            if not mode or len(cur_base[lan][key].get()) < 2:
-                del(cur_base[lan][key])
 
             if mode: return # Удалить изменить только ключ, без замены значений
 
             for j in rec.get():
-                print(j)
                 rchanging([key],[new_key],j,0)
         else:
             new_key = key
         # Изменение значений
         for j in range(len(mean)):
-            print(lan)
             cur_base[lan][new_key].remove(mean[j])
             cur_base[lan][new_key].append(record(new_key,*[new_mean[j]]))
             rchanging([new_key],[new_key],mean[j],new_mean[j],1)
