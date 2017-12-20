@@ -59,7 +59,6 @@ class record:
 
 class Ask_question:
     def __init__(self,*ltheme,mode = 0):
-        print(ltheme)
         self.base = get_th(*ltheme,mode = mode)
         self.mode = mode
         if type(self.base) == int: self.secret = self.base
@@ -175,7 +174,6 @@ def add(rec,key,*ltheme):
     b = False
     cur_base = 0
     i = None
-    print(ltheme)
     for i in ltheme:
         if i in lbase:
             cur_base = open_th(i)
@@ -286,8 +284,8 @@ def change(mean,new_mean,key,new_key = 0,*theme):
 
     return g
 
-def change_th(key,th1,th2,mode = 0):
-    cur_base = open_th(th1)
+def change_th(key,th1,th2,mode = 0):# Не работает нужно дописать замену из нескольких тем
+    cur_base = get_th(th1)
     if type(cur_base) == 'int': return cur_base
     if cur_base[0].get(key):
         add(cur_base[0][key],key,th2)
@@ -305,11 +303,9 @@ def change_th(key,th1,th2,mode = 0):
 # Получение словаря всех слов в темах theme
 def get_th(*theme,mode = 0):
     res = {}
-    #print(theme)
     for i in theme:
         cur_base = open_th(i)
         if type(cur_base)== int: return cur_base
-        #print(cur_base)
         for j in cur_base[mode].keys():
             if res.get(j):
                 res[j].append(cur_base[mode][j])
