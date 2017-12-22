@@ -14,6 +14,8 @@
 # change(rec,key,new_key = key,mode = 'all') - изменение слова key в rec в
 #                                                   в режиме mode
 # change_th(key,th1,th2) - перемещение слова key из темы 1 в тему 2
+# get_th(theme, mode) - Получение 1 - или 2 словаря со всех тем,
+#                                       с объединенными значениями
 # transl (key, show_theme = False) - возврат перевода слова key(cписок значений)
 
 import os
@@ -25,9 +27,9 @@ LANG = ['en','ru']
 EXT = '.cheng'
 LAT = ['','']
 LAT[1] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-LAT[1] += LAT[1].lower()+' '
+LAT[1] += LAT[1].lower()+'0123456789 ,."?!'
 LAT[0] = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
-LAT[0] += LAT[0].lower()+' '
+LAT[0] += LAT[0].lower()+'0123456789 ,."?!'
 SHEBANG = b'CHENG0:52'
 
 
@@ -53,9 +55,12 @@ class record:
         return self._lan2
     
     def remove(self,*lname):
+        g = 0
         for name in lname:
             if name in self._lan2:
                 self._lan2.remove(name)
+                g += 1
+        return g
 
 class Ask_question:
     def __init__(self,*ltheme,mode = 0):
@@ -63,21 +68,28 @@ class Ask_question:
         self.mode = mode
         if type(self.base) == int: self.secret = self.base
         else: self.secret = 0
+        self.keys = list(self.base.keys())
+        self.avail = list(self.base.keys())
+        self.flag = False
 
     def ask(self):
-        if self.secret: return self.secret
-        keys = list(self.base.keys())
-        self.secret = self.base[keys[randint(0,len(keys)-1)]]
+        if self.flag: return self.secret.getk()
+        if not len(self.avail): self.avail = self.keys.copy()
+        k = randint(0,len(self.avail)-1)
+        self.secret = self.base[self.avail[k]]
+        self.avail.pop(k)
+        self.flag = True
         return self.secret.getk()
 
     def check(self,value):
         if type(self.secret) == int: return self.secret
         if value in self.secret.get():
-            self.secret = 0
-            return True,{value}
+            value = self.secret.get()
+            self.flag = False
+            return True,value
         else:
             value = self.secret.get()
-            self.secret = 0
+            self.flag = False
             return False,value
 
 class Vertex:
@@ -196,34 +208,39 @@ def add(rec,key,*ltheme):
 
 
 def addfile(file,*ltheme):
-    file  = open(file+'.txt','r')
+    file  = open(file,'r')
+    words = []
     for i in file:
-        if not '-' in i: return 1
-        key,*word = i.split('-')
-        if not ',' in word: return 1
-        word = set(word.split(','))
-        add(record(key,word),key,ltheme)
+        tmp = i.split('-')
+        if len(tmp)!= 2: return 1
+        key = tmp[0].strip()
+        word = tmp[1].split(';')
+        while '' in word:
+            word = word.remove('')
+        for j in range(len(word)):
+            word[j] = word[j].strip()
+        words.append(record(key,*word))
+    for i in words:
+        add(i,i.getk(),*ltheme)
     file.close()
     return 0
 
-def del_rec(key,value,*theme,mode = 'all'):
+def del_rec(key,value,*theme,mode = 'point'):
     g = 0
     for i in theme:
         cur_base = open_th(i)
         if type(cur_base) == int:
-            g += 1
             continue
         if cur_base[0].get(key): lan = 0
         else: lan = 1
         if not cur_base[lan].get(key): # Нет такого ключа
-            g += 1
             continue
         if mode == 'all':
             value = cur_base[lan][key].get()
             del(cur_base[lan][key])
         else:
             for j in value:
-                cur_base[lan][key].remove(j)
+                g += cur_base[lan][key].remove(j)
                 if len(cur_base[lan][key].get()) == 0:
                     del(cur_base[lan][key])
         for j in value:
@@ -312,6 +329,7 @@ def get_th(*theme,mode = 0):
             else:
                 res[j] = cur_base[mode][j]
     return res
+
 
 def transl(key, show_theme = False):
     lbase = scan()
