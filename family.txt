@@ -1,0 +1,12 @@
+дедушка - grandfather; grandpa; granddad 
+бабушка - grandmother; grandma; granny 
+отец - father; daddy; dad
+мама - mother;mummy; mum; mom
+сестра - sister
+брат - brother 
+сын - son
+дочь - daughter
+дядя - uncle
+тётя - aunt
+двоюродный брат - cousin
+двоюродная сестра - cousin

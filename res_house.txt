@@ -1,0 +1,27 @@
+диванная подушка-cushion
+книжный шкаф-bookcase
+потолок-ceiling
+мебель-furniture
+ковёр-carpet
+chair-arm
+диван-sofa
+картина-painting
+обои-wallpaper
+камин-fireplace
+лампа-lamp
+торшер-floor lamp
+журнальный столик-coffee table
+занавески-curtains
+домашние растения-indoor plants
+полка для книг-bookshelf
+раковина-sink
+духовка-oven
+нож-knife
+столовые ложки-spoons
+чайные ложки-teaspoons
+вилки-forks
+салфетки-napkins
+чашки-cups
+чайник-kettle
+холодильник-fridge
+морозилка-freezer

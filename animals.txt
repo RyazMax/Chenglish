@@ -1,0 +1,6 @@
+собака - dog
+кошка - cat
+кот - cat
+лошадь - horse
+бык - bull;ox
+птица - bird
