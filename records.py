@@ -129,6 +129,12 @@ class Bor:
                 res += self.get(self.vs[v].next[i],mode)
         return res
 
+def initdir():
+    try:
+        scan()
+    except:
+        os.mkdir(LANGD)
+
 def scan(name = EXT,): 
     return [i[:-len(name)] 
             for i in os.listdir(LANGD) if i[-len(name):] == name]

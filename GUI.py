@@ -506,6 +506,7 @@ class DeleteWord:
         self.mbut.grid(row=4, column=0, pady=2.5)
 
         self.frame = root.creatFrame()
+        self.flag = False
 
         self.lbl1 = Label(self.frame, text='Выбрать слово')
         self.lbl1.grid(row=0, column=0, columnspan=2)
@@ -843,7 +844,7 @@ class Check:
             self.lbl[5].configure(text='Правильно', fg='green', font=30)
             self.corr += 1
         else:
-            self.lbl[5].configure(text='Не правильно', fg='red', font=30)
+            self.lbl[5].configure(text='Неправильно', fg='red', font=30)
         for i in self.ask.secret.get():
             self.lb.insert(0, i)
         self.but[7]['text'] = 'Дальше'
@@ -858,6 +859,7 @@ class Check:
 
 
 if __name__ == '__main__':
+    initdir()
     window = MainWindow()
     check = Check(window)
     shword = ShowWord(window)
